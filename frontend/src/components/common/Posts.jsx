@@ -31,7 +31,7 @@ const Posts = ({ feedType }) => {
     queryFn: async () => {
       try {
         const res = await fetch(POST_ENDPOINT);
-        const data = res.json();
+        const data = await res.json();
 
         if (!res.ok) throw new Error(data.error || "Something went wrong");
 
