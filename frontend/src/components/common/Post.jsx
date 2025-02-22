@@ -8,10 +8,16 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
+import { formatPostDate } from "../../utils/date";
 
 const Post = ({ post }) => {
   const [comment, setComment] = useState("");
   const postOwner = post.user;
+  const isLiked = post.likes.includes(authUser._id);
+
+  const isMyPost = authUser._id === post.user._id;
+
+  const formattedDate = formatPostDate(post.createdAt);
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
   const queryClient = useQueryClient();
   const { mutate: deletePost, isPending: isDeleting } = useMutation({
@@ -103,11 +109,6 @@ const Post = ({ post }) => {
       toast.error(error);
     },
   });
-  const isLiked = post.likes.includes(authUser._id);
-
-  const isMyPost = authUser._id === post.user._id;
-
-  const formattedDate = "1h";
 
   // const isCommenting = false;
 
@@ -149,7 +150,7 @@ const Post = ({ post }) => {
               <span>·</span>
               <span>{formattedDate}</span>
             </span>
-            {isDeleting && (
+            {isMyPost && (
               <span className="flex justify-end flex-1">
                 <FaTrash
                   className="cursor-pointer hover:text-red-500"
