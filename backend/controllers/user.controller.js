@@ -153,7 +153,7 @@ export const updateUser = async (req, res) => {
       //password is null while sending as a response
       user.password = null;
 
-      return res.status(200).json({ user });
+      return res.status(200).json(user);
     }
   } catch (error) {
     console.log("Error in updateUser controller asdasd :", error);

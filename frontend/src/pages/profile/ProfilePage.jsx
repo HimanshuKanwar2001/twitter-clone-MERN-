@@ -21,6 +21,7 @@ import { formatMemberSinceDate } from "../../utils/date";
 
 import useFollow from "../../hooks/useFollow";
 import toast from "react-hot-toast";
+import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
 
 const ProfilePage = () => {
   const [coverImg, setCoverImg] = useState(null);
@@ -53,37 +54,7 @@ const ProfilePage = () => {
       }
     },
   });
-  console.log("user is here:", user?._id);
-  console.log("authUser is here :", authUser._id);
-  console.log("TRUE OR LOSS :", authUser?._id === user?._id);
-  const { mutate: updateProfile, isPending: isUpdatingProfile } = useMutation({
-    mutationFn: async () => {
-      try {
-        const res = await fetch(`/api/users/update`, {
-          method: "POST",
-          headers: {
-            "Content=Types": "application/json",
-          },
-          body: JSON.stringify({ coverImg, profileImg }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Something went wrong");
-        return data;
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
-    onSuccess: () => {
-      toast.success("Profile updated successfully");
-      Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-        queryClient.invalidateQueries({ queryKey: ["userProfile"] }),
-      ]);
-    },
-    onError: (error) => {
-      toast.error(error);
-    },
-  });
+  const { updateProfile, isUpdatingProfile } = useUpdateUserProfile();
 
   const isMyProfile = authUser?._id === user?._id;
   const amIFollowing = authUser?.following.includes(user?._id);
@@ -194,7 +165,7 @@ const ProfilePage = () => {
                 {(coverImg || profileImg) && (
                   <button
                     className="btn btn-primary rounded-full btn-sm text-white px-4 ml-2"
-                    onClick={() => updateProfile()}
+                    onClick={() => updateProfile({ coverImg, profileImg })}
                   >
                     {isUpdatingProfile ? "Updating..." : "Update"}
                   </button>
