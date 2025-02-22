@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 const Posts = ({ feedType, username, userId }) => {
   // const isLoading = false;
-  console.log("feedType :", feedType);
+  // console.log("feedType :", feedType);
   const getPostEndpoint = () => {
     switch (feedType) {
       case "forYou":
