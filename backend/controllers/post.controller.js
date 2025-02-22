@@ -176,6 +176,7 @@ export const getLikedPosts = async (req, res) => {
     const likedPosts = await Post.find({
       _id: { $in: user.likedPosts },
     })
+      .sort({ createdAt: -1 })
       .populate({
         path: "user",
         select: "-password",
@@ -214,10 +215,12 @@ export const getFollowingPost = async (req, res) => {
 };
 
 export const getUserPosts = async (req, res) => {
+  // console.log("I am inside getUserPosts post");
   try {
     const { username } = req.params;
 
-    const user = await User.find({ username });
+    const user = await User.findOne({ username });
+    // console.log(user);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const posts = await Post.find({ user: user._id })
@@ -231,6 +234,7 @@ export const getUserPosts = async (req, res) => {
         select: "-password",
       });
 
+    // console.log("POSTS :", posts);
     res.status(200).json(posts);
   } catch (error) {
     console.log("Error in getUserPosts controller :", error.message);
