@@ -19,9 +19,17 @@ const useFollow = () => {
       }
     },
     onSuccess: () => {
+      
       Promise.all([
         queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] }),
         queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+        // queryClient.setQueryData(["suggestedUsers"], (oldData) => {
+        //   return oldData.map((p) => {
+        //     if (p._id === post._id) {
+        //       return { ...p, likes: updatedLikes };
+        //     }
+        //     return p;
+        //   });
       ]);
     },
     onError: (error) => {
