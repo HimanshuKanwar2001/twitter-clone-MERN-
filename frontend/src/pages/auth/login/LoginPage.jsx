@@ -42,8 +42,8 @@ const LoginPage = () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
     onError: (error) => {
-      console.log(error);
-      toast.error(error);
+      console.log(error.message);
+      toast.error(error.message);
     },
   });
 
