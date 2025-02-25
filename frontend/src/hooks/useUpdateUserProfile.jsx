@@ -3,13 +3,13 @@ import toast from "react-hot-toast";
 
 const useUpdateUserProfile = () => {
   const queryClient = useQueryClient();
-  const { mutate: updateProfile, isPending: isUpdatingProfile } = useMutation({
+  const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useMutation({
     mutationFn: async (formData) => {
       try {
         const res = await fetch(`/api/users/update`, {
           method: "POST",
           headers: {
-            "Content-Types": "application/json",
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
         });
@@ -28,7 +28,7 @@ const useUpdateUserProfile = () => {
       ]);
     },
     onError: (error) => {
-      toast.error(error);
+      toast.error(error.message);
     },
   });
 
